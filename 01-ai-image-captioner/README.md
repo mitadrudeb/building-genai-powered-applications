@@ -55,7 +55,18 @@ flowchart LR
 
 ---
 
-## 🚀 Running Locally
+## 🚀 Quick Start
+
+### Option 1: Run in Google Colab (1-Click Cloud Execution)
+
+Click the badge or the link below to open and run the complete notebook in Google Colab:
+
+[![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/mitadrudeb/building-genai-powered-applications/blob/main/01-ai-image-captioner/AI_Image_Captioner.ipynb)
+
+**Direct Google Colab Link:**  
+🔗 [https://colab.research.google.com/github/mitadrudeb/building-genai-powered-applications/blob/main/01-ai-image-captioner/AI_Image_Captioner.ipynb](https://colab.research.google.com/github/mitadrudeb/building-genai-powered-applications/blob/main/01-ai-image-captioner/AI_Image_Captioner.ipynb)
+
+### Option 2: Run Locally
 
 ```bash
 # 1. Navigate to this project folder
