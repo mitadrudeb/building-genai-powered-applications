@@ -7,7 +7,13 @@ An AI-powered image captioning application powered by **Salesforce BLIP** (~0.25
 ![Hugging Face](https://img.shields.io/badge/🤗_Hugging_Face-Transformers-orange)
 ![Gradio](https://img.shields.io/badge/Gradio-UI-brightgreen)
 
-> 💡 **Google Colab Note:** If running from a private GitHub repository, ensure you grant Google Colab access to your private GitHub repos under *File > Open notebook > GitHub*, or set the repository to public when showcasing on your resume/portfolio.
+---
+
+## 🖥️ Demo Preview
+
+![AI Image Captioner Demo](./assets/demo.gif)
+
+> 💡 **Google Colab:** Click the **Open in Colab** badge above to run the complete interactive notebook in the cloud with free GPU acceleration.
 
 ---
 
