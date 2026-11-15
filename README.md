@@ -17,7 +17,7 @@ Each project in this repository explores a foundational pillar of modern AI engi
 | # | Project | Domain | Key Technologies | Status | Link |
 |---|---------|--------|------------------|:------:|:----:|
 | **01** | **AI Image Captioner** | Multimodal Vision AI & Web Scraping | Salesforce BLIP (~0.25B), Gradio, BeautifulSoup, PyTorch | ✅ Completed | [📁 Project Folder](./01-ai-image-captioner) <br> [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/mitadrudeb/building-genai-powered-applications/blob/main/01-ai-image-captioner/AI_Image_Captioner.ipynb) |
-| **02** | *RAG Document Q&A Assistant* | Retrieval-Augmented Generation | LangChain, Llama 3, ChromaDB / FAISS, Sentence Transformers | 🚧 Planned | *Coming Soon* |
+| **02** | **Conversational AI Chatbot** | Conversational Dialogue & Context Memory | Facebook BlenderBot (~0.4B), PyTorch, Gradio, Transformers | ✅ Completed | [📁 Project Folder](./02-conversational-ai-chatbot) <br> [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/mitadrudeb/building-genai-powered-applications/blob/main/02-conversational-ai-chatbot/Conversational_AI_Chatbot.ipynb) |
 | **03** | *Audio-to-Insight Transcriber* | Speech AI & Summarization | OpenAI Whisper, PyTorch, Gradio | 🚧 Planned | *Coming Soon* |
 | **04** | *Function-Calling AI Agent* | Agentic Systems & Tool Use | Tool Calling, API Integration, Pydantic | 🚧 Planned | *Coming Soon* |
 | **05** | *Lightweight LLM Fine-Tuner* | Parameter-Efficient Tuning | LoRA / QLoRA, PEFT, TRL, Hugging Face Hub | 🚧 Planned | *Coming Soon* |
