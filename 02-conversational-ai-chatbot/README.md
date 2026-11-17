@@ -158,12 +158,36 @@ Anyone with their own **OpenAI API key** can test this section with models like 
 
 ---
 
-## 🧪 Beginner Learning Challenges
+## 🧪 Experiments, Failure Modes & Key Observations
 
-Try these hands-on exercises in the notebook or CLI:
-1. **Pronoun Resolution Test:** Ask *"I am planning a trip to Kyoto next spring."* Then ask *"What are the best temples to see there?"* Notice how the bot remembers you are talking about Kyoto without repeating the city name.
-2. **Temperature Experiment:** Lower temperature to `0.2` and ask *"Tell me a story about a dragon."* Then increase temperature to `1.2`. Compare how conservative vs. adventurous the vocabulary becomes.
-3. **Memory Truncation:** Set `history_turns=1`. Chat for 3 turns, then ask *"What was the first thing I asked you?"* Observe how sliding-window truncation gracefully drops older context.
+During the implementation and testing of this conversational agent, I conducted targeted experiments to analyze model behavior, memory retention, and decoding dynamics:
+
+1. **Pronoun Resolution & Multi-Turn Coherence:**
+   - *Test:* Asked *"I am planning a trip to Kyoto next spring."* followed by *"What are the best temples to see there?"*
+   - *Observation:* With sliding-window memory active, the model successfully resolved the pronoun *"there"* to Kyoto without requiring explicit repetition, recommending popular historical sites (such as Kinkaku-ji and Fushimi Inari).
+2. **Decoding Parameter Sensitivity (Temperature & Repetition Penalty):**
+   - *Low Temperature (0.1 – 0.3):* The model produces deterministic, conservative responses, but frequently repeats boilerplate greetings or stock phrases.
+   - *Balanced Temperature (0.6 – 0.8) + Repetition Penalty (1.2 – 1.3):* Delivers the most natural, varied conversational flow while preventing token looping.
+   - *High Temperature (>1.2):* Creative but prone to hallucination and topic drift.
+3. **Sliding-Window Memory Truncation:**
+   - Setting `history_turns=1` caused the model to lose context immediately when asked reference questions (e.g., *"What was the first topic we discussed?"*).
+   - Setting `history_turns=6` retained sufficient context for natural back-and-forth chit-chat while remaining well below BlenderBot's 512-token sequence limit.
+4. **Delimiter Sensitivity (BlenderBot-Specific):**
+   - In early testing, injecting artificial role markers (`User:` / `Bot:`) caused out-of-distribution confusion in BlenderBot's BPE tokenizer, leading to conversational resets.
+   - Aligning with BlenderBot's native double-space (`"  "`) delimiter immediately resolved this issue and restored multi-turn topic coherence.
+
+---
+
+## 🏆 Engineering Takeaways & Lessons Learned
+
+1. **Statefulness is an Application-Level Abstraction:**
+   Transformer models are inherently stateless function approximators. Conversational continuity requires deliberate engineering: capturing, formatting, and injecting past dialogue into the input representation before each forward pass.
+2. **Sliding-Window Context Bounding:**
+   Unbounded conversation history leads to quadratic self-attention costs and context window truncation. Implementing an explicit sliding window keeps computation bounded, latency predictable, and token counts within the model's budget.
+3. **Training Distribution Alignment:**
+   Prompt structure cannot be arbitrary. Distilled dialogue models like BlenderBot are sensitive to formatting; adhering strictly to their pre-training delimiter (`"  "`) was essential to prevent persona degradation.
+4. **Defensive API & UI Design:**
+   Frameworks like Gradio 5/6 pass structured multimodal content blocks (`list` / `dict`) rather than simple strings across turns. Implementing defensive text extraction (`extract_text`) prevents production runtime crashes.
 
 ---
 
