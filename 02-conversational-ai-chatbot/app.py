@@ -186,7 +186,88 @@ def run_cli_chat():
 
 
 # ---------------------------------------------------------
-# 5. Gradio Web Interface
+# 5. Bonus: Frontier Model Integration (OpenAI API)
+# ---------------------------------------------------------
+# Anyone with their own OpenAI API key can test this section with frontier
+# models such as GPT-4o-mini or GPT-4o.
+#
+# Prerequisites:
+#   pip install openai
+#
+# Setup:
+#   export OPENAI_API_KEY="your-api-key-here"   (Linux / macOS)
+#   $env:OPENAI_API_KEY="your-api-key-here"     (Windows PowerShell)
+#
+# import os
+# from openai import OpenAI
+#
+# def generate_openai_response(
+#     message,
+#     history,
+#     model_name: str = "gpt-4o-mini",
+#     temperature: float = 0.7,
+#     max_tokens: int = 150,
+#     history_turns: int = 6,
+# ) -> str:
+#     """
+#     Generate a response using OpenAI's Chat Completions API with conversational memory.
+#     Showcases frontier model API integration and structured message formatting.
+#     """
+#     api_key = os.getenv("OPENAI_API_KEY")
+#     if not api_key:
+#         return (
+#             "⚠️ OPENAI_API_KEY environment variable not found. "
+#             "Please set your OpenAI API key to test frontier model completions."
+#         )
+#
+#     client = OpenAI(api_key=api_key)
+#     user_text = extract_text(message)
+#     if not user_text:
+#         return "Please enter a message!"
+#
+#     # Construct the messages payload with a system prompt and sliding window history
+#     messages = [
+#         {
+#             "role": "system",
+#             "content": "You are a helpful, empathetic, and engaging AI assistant.",
+#         }
+#     ]
+#
+#     past_messages = []
+#     if history:
+#         for turn in history:
+#             if isinstance(turn, dict):
+#                 role = turn.get("role", "user")
+#                 text = extract_text(turn.get("content"))
+#                 if text:
+#                     past_messages.append({"role": role, "content": text})
+#             elif isinstance(turn, (list, tuple)) and len(turn) == 2:
+#                 u_text = extract_text(turn[0])
+#                 b_text = extract_text(turn[1])
+#                 if u_text:
+#                     past_messages.append({"role": "user", "content": u_text})
+#                 if b_text:
+#                     past_messages.append({"role": "assistant", "content": b_text})
+#
+#     # Apply sliding window (keep last N turns = 2N messages)
+#     max_history_count = int(history_turns) * 2
+#     messages.extend(past_messages[-max_history_count:])
+#     messages.append({"role": "user", "content": user_text})
+#
+#     try:
+#         response = client.chat.completions.create(
+#             model=model_name,
+#             messages=messages,
+#             temperature=float(temperature),
+#             max_tokens=int(max_tokens),
+#         )
+#         return response.choices[0].message.content.strip()
+#     except Exception as e:
+#         return f"OpenAI API Error: {e}"
+
+
+# ---------------------------------------------------------
+# 6. Gradio Web Interface
 # ---------------------------------------------------------
 def create_gradio_app():
     """Build and configure the Gradio ChatInterface."""
@@ -261,7 +342,7 @@ def create_gradio_app():
 
 
 # ---------------------------------------------------------
-# 6. Application Entry Point
+# 7. Application Entry Point
 # ---------------------------------------------------------
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Conversational AI Chatbot")

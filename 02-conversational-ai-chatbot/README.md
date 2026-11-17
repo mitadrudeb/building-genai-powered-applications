@@ -20,6 +20,7 @@ Part of the [Building GenAI-Powered Applications](https://github.com/mitadrudeb/
 - **🔒 100% Open-Source & Zero API Keys:** Runs completely offline and locally without paying for proprietary OpenAI/Anthropic APIs or managing rate limits.
 - **🎛️ Dynamic Generation Controls:** Real-time sliders in Gradio for **Temperature**, **Top-P (Nucleus Sampling)**, **Repetition Penalty**, **Max Tokens**, and **Context Window Depth**.
 - **💻 Dual Interaction Modes:** Run it as a rich web app with `python app.py` or as a terminal chat assistant with `python app.py --cli`.
+- **🌐 Frontier Model Bonus:** Includes a modular OpenAI Chat Completions integration block to demonstrate how the same conversational memory translates to proprietary models (e.g. GPT-4o-mini).
 - **🚀 1-Click Cloud Execution:** Pre-configured Google Colab notebook for instant execution with free GPU support.
 
 ---
@@ -59,6 +60,20 @@ BlenderBot was pre-trained using **double spaces (`"  "`)** as the separator bet
 
 ---
 
+## ⚖️ Model Comparison: BlenderBot 400M vs. Modern Causal LLMs (Qwen3.5 / Llama)
+
+| Feature | Facebook BlenderBot-400M-distill | Modern Causal LLMs (e.g. Qwen3.5-4B / Llama 3.2 3B) |
+| :--- | :--- | :--- |
+| **Architecture** | Seq2Seq (Encoder-Decoder) | Decoder-Only Causal Transformer |
+| **Parameter Count** | ~400 Million (0.4B) | 3 to 4 Billion (3B–4B) |
+| **Download Size** | ~730 MB | ~6 GB to ~8 GB (FP16) / ~2.5 GB (4-bit quant) |
+| **Hardware Required** | Consumer CPU (<1.5 GB RAM) | Dedicated GPU (6–8 GB VRAM) or high-spec CPU |
+| **CPU Latency** | Sub-second (<1s per response) | Slow on pure CPU (5–15s per response) |
+| **Core Strengths** | Empathetic open-domain chit-chat | Multi-step reasoning, coding, tool calling, structured JSON |
+| **When to Use** | Lightweight local chatbots, edge devices, zero-cost learning | Production enterprise copilots, code generation, complex agents |
+
+---
+
 ## ⚙️ Generation Parameter Cheatsheet
 
 | Parameter | What it Does | Typical Range | Recommended |
@@ -76,7 +91,7 @@ BlenderBot was pre-trained using **double spaces (`"  "`)** as the separator bet
 
 ```text
 02-conversational-ai-chatbot/
-├── app.py                         # Standalone script (Gradio Web UI + CLI mode)
+├── app.py                         # Standalone script (Gradio Web UI + CLI mode + OpenAI bonus)
 ├── Conversational_AI_Chatbot.ipynb # Interactive Jupyter Notebook (Google Colab ready)
 ├── requirements.txt               # Lightweight project dependencies
 └── README.md                      # Project documentation and guide
@@ -132,6 +147,28 @@ Click the badge at the top or open:
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/mitadrudeb/building-genai-powered-applications/blob/main/02-conversational-ai-chatbot/Conversational_AI_Chatbot.ipynb)
 
 Run all cells step-by-step to experiment with code, visualize conversational memory, and launch the shareable Gradio link.
+
+---
+
+## 🌐 Bonus: Frontier Model Integration (OpenAI API)
+
+To showcase knowledge of both open-source models and frontier commercial APIs, a modular integration section is included in both `app.py` and `Conversational_AI_Chatbot.ipynb`.
+
+Anyone with their own **OpenAI API key** can test this section with models like **GPT-4o-mini** or **GPT-4o**:
+
+1. Install the official OpenAI SDK:
+   ```bash
+   pip install openai
+   ```
+2. Set your environment variable:
+   ```bash
+   # Linux / macOS:
+   export OPENAI_API_KEY="your-api-key-here"
+
+   # Windows PowerShell:
+   $env:OPENAI_API_KEY="your-api-key-here"
+   ```
+3. Uncomment the `generate_openai_response` block in `app.py` or run Section 8 in the Jupyter Notebook.
 
 ---
 
