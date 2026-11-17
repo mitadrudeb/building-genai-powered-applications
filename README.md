@@ -13,18 +13,6 @@ Each project in this monorepo explores a core pillar of modern AI engineering �
 
 ---
 
-## 💼 Technical Competencies & Skills Demonstrated
-
-| Competency Area | Skills & Techniques | Demonstrated In |
-| :--- | :--- | :---: |
-| **Large Language Models (LLMs)** | Conversational Memory (Sliding Window), Tokenizer Delimiters, Decoding Controls (Temperature, Top-P, Repetition Penalty, N-gram blocking) | **Project 02** |
-| **Multimodal Vision-Language AI** | Vision Transformers (ViT), Cross-Attention Decoders, Web Scraping & Ingestion, Dynamic Batch Processing | **Project 01** |
-| **Frontier API Integration** | OpenAI Chat Completions SDK (`openai>=1.0.0`), Message Schema Mapping, Secure Environment Configuration | **Project 02** |
-| **Full-Stack AI Interfaces** | Gradio Web Apps, Interactive Parameter Sliders, Terminal CLI modes, Defensive Data Parsing | **Projects 01 & 02** |
-| **Cloud & Deployment** | Google Colab 1-Click Reproducibility, PyTorch CUDA GPU / CPU auto-scaling, Git Monorepo architecture | **All Projects** |
-
----
-
 ## 📂 Projects Showcase
 
 | # | Project | Domain | Key Technologies | Status | Link |
