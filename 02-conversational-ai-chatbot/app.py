@@ -23,7 +23,7 @@ MODEL_NAME = "facebook/blenderbot-400M-distill"
 DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
 
 print(f"🚀 Initializing Conversational AI Assistant...")
-print(f"📦 Model: {MODEL_NAME}")
+print(f"📦 Model:  {MODEL_NAME}")
 print(f"💻 Device: {DEVICE.upper()}")
 
 try:
@@ -36,11 +36,34 @@ except Exception as e:
 
 
 # ---------------------------------------------------------
-# 2. Conversational Generation Engine
+# 2. Text Extraction Helper (Gradio 4 / 5 / 6 Compatibility)
+# ---------------------------------------------------------
+def extract_text(item) -> str:
+    """
+    Safely extract plain text string from str, list, or dict.
+    Gradio 5/6 can wrap messages as dicts {'text': ...} or lists ['...'].
+    """
+    if not item:
+        return ""
+    if isinstance(item, str):
+        return item.strip()
+    if isinstance(item, dict):
+        if "text" in item:
+            return extract_text(item["text"])
+        if "content" in item:
+            return extract_text(item["content"])
+    if isinstance(item, (list, tuple)):
+        parts = [extract_text(sub) for sub in item]
+        return " ".join(p for p in parts if p).strip()
+    return str(item).strip()
+
+
+# ---------------------------------------------------------
+# 3. Conversational Generation Engine
 # ---------------------------------------------------------
 def generate_bot_response(
-    message: str,
-    history: list,
+    message,
+    history,
     temperature: float = 0.7,
     top_p: float = 0.85,
     repetition_penalty: float = 1.3,
@@ -51,40 +74,42 @@ def generate_bot_response(
     Generate a coherent, context-aware response using multi-turn conversational memory.
 
     Parameters:
-    - message (str): The latest user input.
-    - history (list): Chat history (supports both Gradio 5/6 message dicts and legacy tuples).
-    - temperature (float): Sampling randomness (lower = deterministic, higher = creative).
-    - top_p (float): Nucleus sampling probability threshold.
-    - repetition_penalty (float): Penalizes repeated phrases and token loops.
-    - max_tokens (int): Maximum new tokens to generate per response.
-    - history_turns (int): Maximum number of previous dialogue turns to retain.
+    - message: Latest user input (string or dict).
+    - history: Conversation history (list of message dicts or legacy tuples).
+    - temperature: Sampling randomness (lower = focused, higher = creative).
+    - top_p: Nucleus sampling probability threshold.
+    - repetition_penalty: Penalizes repetitive phrases and token loops.
+    - max_tokens: Maximum new tokens to generate per response.
+    - history_turns: Number of preceding dialogue turns retained in context.
     """
-    if not message or not message.strip():
+    user_text = extract_text(message)
+    if not user_text:
         return "Please say something so we can chat!"
 
-    # 1. Parse conversational history into individual utterances
+    # 1. Parse history into individual conversational utterances
     utterances = []
     if history:
         for turn in history:
             if isinstance(turn, dict):
-                # Modern Gradio format: [{'role': 'user', 'content': '...'}, ...]
-                content = turn.get("content", "").strip()
-                if content:
-                    utterances.append(content)
+                # Gradio messages format: {'role': 'user'/'assistant', 'content': ...}
+                text = extract_text(turn.get("content"))
+                if text:
+                    utterances.append(text)
             elif isinstance(turn, (list, tuple)) and len(turn) == 2:
-                # Legacy Gradio format: [(user_msg, bot_msg), ...]
-                user_msg, bot_msg = turn
+                # Gradio legacy tuples format: (user_msg, bot_msg)
+                user_msg = extract_text(turn[0])
+                bot_msg = extract_text(turn[1])
                 if user_msg:
-                    utterances.append(str(user_msg).strip())
+                    utterances.append(user_msg)
                 if bot_msg:
-                    utterances.append(str(bot_msg).strip())
+                    utterances.append(bot_msg)
 
-    # 2. Apply sliding window memory (keep last N dialogue turns)
+    # 2. Sliding window memory: keep only recent dialogue turns (N turns = 2N utterances)
     max_history_count = int(history_turns) * 2
     recent_utterances = utterances[-max_history_count:]
-    recent_utterances.append(message.strip())
+    recent_utterances.append(user_text)
 
-    # 3. Format prompt using BlenderBot's native dialogue delimiter (double space: "  ")
+    # 3. BlenderBot native delimiter: double space ("  ") between utterances
     prompt = "  ".join(recent_utterances)
 
     # 4. Tokenize with safe truncation
@@ -92,7 +117,7 @@ def generate_bot_response(
         prompt,
         return_tensors="pt",
         truncation=True,
-        max_length=512
+        max_length=512,
     ).to(DEVICE)
 
     # 5. Generate conversational response with sampling controls
@@ -103,16 +128,16 @@ def generate_bot_response(
         repetition_penalty=float(repetition_penalty),
         do_sample=True,
         temperature=float(temperature),
-        top_p=float(top_p)
+        top_p=float(top_p),
     )
 
-    # 6. Decode output tokens to natural language
+    # 6. Decode output tokens back into natural language
     response = tokenizer.decode(outputs[0], skip_special_tokens=True).strip()
     return response
 
 
 # ---------------------------------------------------------
-# 3. Interactive CLI Mode (Beginner-Friendly Terminal Chat)
+# 4. Interactive CLI Mode (Beginner-Friendly Terminal Chat)
 # ---------------------------------------------------------
 def run_cli_chat():
     """Run an interactive terminal session with sliding-window memory."""
@@ -143,7 +168,6 @@ def run_cli_chat():
             print("[Memory cleared]\n")
             continue
 
-        # Generate response using sliding window history
         bot_response = generate_bot_response(
             message=user_input,
             history=history,
@@ -156,13 +180,13 @@ def run_cli_chat():
 
         print(f"Bot  > {bot_response}\n")
 
-        # Record exchange in history
+        # Save to history
         history.append({"role": "user", "content": user_input})
         history.append({"role": "assistant", "content": bot_response})
 
 
 # ---------------------------------------------------------
-# 4. Gradio Web Interface
+# 5. Gradio Web Interface
 # ---------------------------------------------------------
 def create_gradio_app():
     """Build and configure the Gradio ChatInterface."""
@@ -193,7 +217,7 @@ def create_gradio_app():
                 value=0.7,
                 step=0.05,
                 label="🌡️ Temperature (Creativity)",
-                info="Higher values = more creative & diverse; Lower = focused & deterministic.",
+                info="Higher = creative & diverse; Lower = focused & deterministic.",
             ),
             gr.Slider(
                 minimum=0.1,
@@ -237,7 +261,7 @@ def create_gradio_app():
 
 
 # ---------------------------------------------------------
-# 5. Application Entry Point
+# 6. Application Entry Point
 # ---------------------------------------------------------
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Conversational AI Chatbot")
