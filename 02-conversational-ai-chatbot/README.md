@@ -60,20 +60,6 @@ BlenderBot was pre-trained using **double spaces (`"  "`)** as the separator bet
 
 ---
 
-## ⚖️ Model Comparison: BlenderBot 400M vs. Modern Causal LLMs (Qwen3.5 / Llama)
-
-| Feature | Facebook BlenderBot-400M-distill | Modern Causal LLMs (e.g. Qwen3.5-4B / Llama 3.2 3B) |
-| :--- | :--- | :--- |
-| **Architecture** | Seq2Seq (Encoder-Decoder) | Decoder-Only Causal Transformer |
-| **Parameter Count** | ~400 Million (0.4B) | 3 to 4 Billion (3B–4B) |
-| **Download Size** | ~730 MB | ~6 GB to ~8 GB (FP16) / ~2.5 GB (4-bit quant) |
-| **Hardware Required** | Consumer CPU (<1.5 GB RAM) | Dedicated GPU (6–8 GB VRAM) or high-spec CPU |
-| **CPU Latency** | Sub-second (<1s per response) | Slow on pure CPU (5–15s per response) |
-| **Core Strengths** | Empathetic open-domain chit-chat | Multi-step reasoning, coding, tool calling, structured JSON |
-| **When to Use** | Lightweight local chatbots, edge devices, zero-cost learning | Production enterprise copilots, code generation, complex agents |
-
----
-
 ## ⚙️ Generation Parameter Cheatsheet
 
 | Parameter | What it Does | Typical Range | Recommended |
