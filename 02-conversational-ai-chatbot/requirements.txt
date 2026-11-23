@@ -1,5 +1,10 @@
-torch>=2.0.0
-transformers>=4.40.0
-gradio>=4.0.0
-sentencepiece
+# torch is NOT listed: Colab already has it, and local users should install the
+# build that matches their hardware from https://pytorch.org (see README).
+transformers
 accelerate
+gradio
+python-dotenv
+openai
+anthropic
+google-genai
+pytest
