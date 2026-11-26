@@ -77,12 +77,12 @@ def stream_reply(processor, model, history, system_prompt="",
     )
 
     generation_kwargs = dict(
-        inputs=inputs,
+        **inputs,
         streamer=streamer,
         max_new_tokens=max_new_tokens,
         do_sample=True,
         temperature=temperature,
-        top_k=50,
+        top_k=20,
         top_p=1.0,
     )
 
