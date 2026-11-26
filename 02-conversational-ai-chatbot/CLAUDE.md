@@ -1,23 +1,30 @@
-# Project: Multi-provider LLM chatbot
+# Project: Multi-provider LLM chatbot (Project 02)
 
-Gradio chatbot that talks to a local open-source model (Qwen3.5 via Hugging Face
-transformers) or to frontier APIs (OpenAI, Anthropic, Gemini). Portfolio project.
+A Gradio chatbot that talks to a local open-source model (Qwen3.5 with Hugging Face
+transformers) or, later, to frontier APIs (OpenAI, Anthropic, Gemini). Portfolio project.
+It lives in the folder 02-conversational-ai-chatbot of the monorepo.
+Work branch: rebuild-02-chatbot.
 
 ## Decisions
 - UI: Gradio ChatInterface with streaming. No Flask, Docker or LangChain.
-- Providers share one interface (adapter pattern): messages in -> streamed text out.
-- Internal message format: {"role": "user"|"assistant", "content": str}.
-- Local model loads lazily, once. Device is auto-detected (CUDA or CPU).
-- API keys come from .env, Colab Secrets, or a session-only UI field. Never commit keys.
-- Model IDs live in config, never hard-coded in logic.
-- Colab is the developer's only GPU runtime; the laptop runs tests and API-only mode.
-- Lives in folder 02-conversational-ai-chatbot of the monorepo; developed on branch rebuild-02-chatbot.
+- Message format: {"role": "user" or "assistant", "content": "plain text"}.
+- Only local_model.py changes messages into the format Qwen needs.
+- Keep the code simple. Add abstractions (config file, provider interface) only when
+  they are really needed (Stage 4).
+- API keys come from .env, Colab Secrets or a session-only UI field. Never commit keys.
+- The model only runs in Colab (no GPU on the laptop). The laptop is for editing, git
+  and tests.
 
 ## Rules
-- Work one stage at a time. Explain concepts simply (reader is a beginner).
+- Work one stage at a time. The reader is a beginner: explain simply.
 - Never commit, push or delete files without asking first.
-- Tests must mock models and APIs (no network, no GPU).
-- Do not invent results or metrics in docs.
+- Tests must use fakes for the model and the APIs (no network, no GPU).
+- Never write results or numbers in docs that were not measured.
+
+## Writing style for project files
+- Comments, docstrings and markdown read like a careful beginner's own notes:
+  simple words, short sentences, explain why (not every obvious line).
+- Semi-professional: clear and accurate, no hype, no jokes.
 
 ## Status
-Stage 0 done. Stage 1 in progress (skeleton).
+Stage 2 done (terminal chat works in Colab). Next: Stage 3 (Gradio UI with streaming).
