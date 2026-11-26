@@ -1,8 +1,11 @@
-# torch is NOT listed: Colab already has it, and local users should install the
-# build that matches their hardware from https://pytorch.org (see README).
-transformers
-accelerate
-gradio
+# The three pinned versions below worked in Google Colab (Python 3.13, T4 GPU).
+# torch is not listed: Colab already has it (I tested with torch 2.14.1+cu130).
+# On a local PC, install torch first from https://pytorch.org
+transformers==5.24.1
+accelerate==1.16.0
+gradio==6.32.0
+
+# Not used yet (Stage 4 and later), so I did not pin them yet
 python-dotenv
 openai
 anthropic
